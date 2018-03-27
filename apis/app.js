@@ -13,12 +13,12 @@ app.all('*', function(req, res, next) { //跨域请求
 });
 const mongoose = require("mongoose");
 let config = require("./config.js");
-app.use("/student", require('./routers/student'));
-app.use("/teacher", require('./routers/teacher'));
-app.use("/score", require('./routers/score'));
-app.use("/exp", require('./routers/exp'));
-app.use("/admin", require('./routers/admin'));
-app.use("/class", require('./routers/class'));
+app.use("/api/student", require('./routers/student'));
+app.use("/api/teacher", require('./routers/teacher'));
+app.use("/api/score", require('./routers/score'));
+app.use("/api/exp", require('./routers/exp'));
+app.use("/api/admin", require('./routers/admin'));
+app.use("/api/class", require('./routers/class'));
 mongoose.connect(config.mongodb.db, function(err) {
     if (err) {
         console.log("数据库连接失败", err);
