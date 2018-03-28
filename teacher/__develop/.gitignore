@@ -1,14 +1,3 @@
-.DS_Store
-node_modules/
-/dist/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+<ul data-v-6efe4612="" role="menubar" class="el-menu el-menu-vertical-demo" style="">
 
-# Editor directories and files
-.idea
-.vscode
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
+

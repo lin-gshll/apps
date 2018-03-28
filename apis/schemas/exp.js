@@ -2,22 +2,18 @@ const mongoose = require("mongoose");
 let schema = mongoose.Schema;
 module.exports = new schema({
     title: String,
-    teaID: {
-        type: schema.Types.ObjectId,
-        ref: 'teacher'
-    },
-    stuID: {
-        type: schema.Types.ObjectId,
-        ref: 'student'
-    },
-    score: Number,
-    status: Number,
-    expID: {
-        type: schema.Types.ObjectId,
-        ref: 'exp'
-    },
+    no: String,
+    teaID: String,
+    status: String,
     created: {
         type: Date,
         default: Date.now()
-    }
+    },
+    start: String,
+    end: String,
+    maxStu: {
+        type: Number,
+        default: 100
+    },
+    guidBook: String
 })

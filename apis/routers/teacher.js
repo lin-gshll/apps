@@ -1,6 +1,6 @@
 let express = require("express");
 let router = express.Router();
-router.get("/add", function(req, res, next) {
-    res.end("1233");
+router.post("/add", function (req, res, next) {
+    console.log(req.body);
 })
 module.exports = router;
