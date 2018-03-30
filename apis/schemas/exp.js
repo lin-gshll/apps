@@ -5,6 +5,7 @@ module.exports = new schema({
     no: String,
     teaID: String,
     status: String,
+    college:String,
     created: {
         type: Date,
         default: Date.now()

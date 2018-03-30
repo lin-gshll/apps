@@ -14,11 +14,11 @@
       </el-form-item>
       <el-form-item label="实验时间">
         <el-col :span="11">
-          <el-date-picker type="datetime" placeholder="开始时间" v-model="ruleForm.start" style="width: 100%;"></el-date-picker>
+          <el-date-picker type="datetime" placeholder="开始时间" v-model="ruleForm.start" style="width: 100%;" value-format="MM-dd HH:mm"></el-date-picker>
         </el-col>
         <el-col class="line" :span="2">-</el-col>
         <el-col :span="11">
-          <el-date-picker type="datetime" placeholder="结束时间" v-model="ruleForm.end" style="width: 100%;"></el-date-picker>
+          <el-date-picker type="datetime" placeholder="结束时间" v-model="ruleForm.end" style="width: 100%;" value-format="MM-dd HH:mm"></el-date-picker>
         </el-col>
       </el-form-item>
       <el-form-item label="开课状态">
@@ -26,8 +26,12 @@
           <el-option v-for='(item,index) in status' :key="index" :label="item.name" :value="item.name"></el-option>
         </el-select>
       </el-form-item>
-       <el-form-item label="指导说明" prop="title">
-        <el-input v-model="ruleForm.guidBook"></el-input>
+      <el-form-item label="指导说明" prop="guidBook">
+        <el-upload class="upload-demo" :action="importFileUrl" :on-preview="handlePreview" :on-remove="handleRemove"
+          :before-remove="beforeRemove" multiple :limit="1" :on-exceed="handleExceed" :file-list="fileList" :on-success="fileSuccess">
+          <el-button size="small" type="primary">点击上传</el-button>
+          <div slot="tip" class="el-upload__tip">只能上传zip,word,pdf,excel文件</div>
+        </el-upload>
       </el-form-item>
       <el-form-item label="指导教师" prop="teaID">
         <el-select v-model="ruleForm.teaID" placeholder="请选择院系">
@@ -46,12 +50,19 @@
 import  store from '@/store/admin/exp'
 import college from "../../../college.js"
 import status from "../../../status.js"
+import  host  from '../../../../../config/localhost.js';
   export default {
     data() {
       return {
+        header:{
+          "Access-Control-Allow-Origin": "*"
+
+        },
+        importFileUrl:host.host+ "/api/admin/file",
         college:college,
         teacherList:"",
         status:status,
+        fileList:[],
         ruleForm: {
           title: '',
           teaID: '',
@@ -60,7 +71,7 @@ import status from "../../../status.js"
           end:"",
           college:"",
           status: "",
-          guidBook:""
+          guidBook:''
         },
         rules: {
           title: [
@@ -101,7 +112,7 @@ import status from "../../../status.js"
                         }
                     )
                     this.$router.push({
-                        path:"/admin/teacher"
+                        path:"/admin/addexp"
                       })
                 }else 
                 {
@@ -126,6 +137,22 @@ import status from "../../../status.js"
       },
       resetForm(formName) {
         this.$refs[formName].resetFields();
+      },
+      fileSuccess(res, file, fileList)
+      {
+        this.ruleForm.guidBook= res.message.path;
+      },
+      handleRemove(file, fileList) {
+        console.log(file, fileList);
+      },
+      handlePreview(file) {
+        console.log(file);
+      },
+      handleExceed(files, fileList) {
+        this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
+      },
+      beforeRemove(file, fileList) {
+        return this.$confirm(`确定移除 ${ file.name }？`);
       }
     },
     mounted:function()

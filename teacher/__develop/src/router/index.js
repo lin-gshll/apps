@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 //管理员
-import login from '@/components/admin/login'
+import loginadmin from '@/components/admin/login'
 import index from "@/components/admin/index"
 import test from "@/components/admin/page/test"
 import teacherList from "@/components/admin/page/teacher/teacher"
@@ -10,14 +10,17 @@ import studentList from "@/components/admin/page/student/student"
 import addStudent from "@/components/admin/page/student/add"
 import expList from "@/components/admin/page/exp/exp"
 import addexp from "@/components/admin/page/exp/add"
+//教师
+import loginteacher from '@/components/teacher/login'
 
 Vue.use(Router)
 
 export default new Router({
-  routes: [{
-      path: '/',
+  routes: [
+    {
+      path: '/admin',
       name: '',
-      component: login,
+      component: loginadmin,
       hidden: true
     },
     {
@@ -41,7 +44,7 @@ export default new Router({
       path: '/index',
       component: index,
       name: '学生管理',
-      iconCls: 'fa fa-address-card',
+      iconCls: 'el-icon-printer',
       children: [{
           path: '/admin/student',
           component: studentList,
@@ -58,7 +61,7 @@ export default new Router({
       path: '/index',
       component: index,
       name: '教师管理',
-      iconCls: 'fa fa-id-card-o',
+      iconCls: 'el-icon-news',
       children: [{
           path: '/admin/teacher',
           component: teacherList,
@@ -70,6 +73,12 @@ export default new Router({
           name: '添加教师'
         }
       ]
-    }
+    },
+     {
+      path: '/teacher',
+      name: '',
+      component: loginteacher,
+      hidden: true
+    },
   ]
 })

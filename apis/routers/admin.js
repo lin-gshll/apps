@@ -2,6 +2,12 @@ let express = require("express");
 let Admin = require("../models/admin.js");
 let Teacher = require("../models/teacher");
 let Student = require("../models/student");
+var multer = require('multer')
+var upload = multer({
+    dest: 'upload_tmp/'
+});
+const fs = require("fs");
+const path = require("path");
 let Exp = require("../models/exp");
 let md5 = require("../util/md5");
 let router = express.Router();
@@ -279,4 +285,72 @@ router.get("/explist", function (req, res, next) {
         res.send(r);
     })
 })
+
+router.post("/delexp", function (req, res, next) {
+    let id = req.body._id || "";
+    Exp.findOne({
+        _id: id
+    }, function (err, r) {
+
+        if (err) {
+            res.send({
+                status: 504,
+                message: "error"
+            })
+        }
+        if (r) {
+            Exp.remove({
+                _id: id
+            }, function (err, r) {
+                if (err) {
+                    res.send({
+                        status: 0,
+                        message: "删除失败"
+                    })
+                } else {
+                    res.send({
+                        status: 1,
+                        message: "删除成功"
+                    })
+                }
+            })
+        } else {
+            res.send({
+                status: -1,
+                message: "用户不存在"
+            })
+        }
+    })
+})
+router.post("/file", upload.single('file'), function (req, res, next) {
+    if (req.file) {
+        // 重命名文件
+        let oldPath = path.join(__dirname, "../" + req.file.path);
+        let newPath = path.join(__dirname, '../upload/' + req.file.filename + req.file.originalname.slice(req.file.originalname.lastIndexOf(".")));
+        fs.rename(oldPath, newPath, (err) => {
+            if (err) {
+                res.send({
+                    status: -1,
+                    message: "error"
+                })
+            } else {
+                res.send({
+                    status: 1,
+                    message: {
+                        "path": '/upload/' + req.file.filename + req.file.originalname.slice(req.file.originalname.lastIndexOf(".")),
+                        "originalname": req.file.originalname,
+                        "filename": req.file.filename
+                    }
+                })
+            }
+        });
+    } else {
+        res.send({
+            status: -1,
+            message: "404.png"
+        })
+    }
+})
+
+
 module.exports = router;

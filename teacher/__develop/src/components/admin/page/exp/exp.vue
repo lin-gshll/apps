@@ -8,9 +8,10 @@
         </el-table-column>
         <el-table-column prop="college" label="开课学院" width="">
         </el-table-column>
-        <el-table-column prop="start" label="实验开始时间" width="">
-        </el-table-column>
-        <el-table-column prop="end" label="实验结束时间" width="">
+        <el-table-column prop="start" label="实验时间" width="">
+          <template slot-scope="scope">
+            {{scope.row.start}} <br>{{scope.row.end}}
+          </template>
         </el-table-column>
         <el-table-column prop="teaID" label="指导教师" width="">
         </el-table-column>
@@ -18,6 +19,7 @@
         </el-table-column>
         <el-table-column label="操作" width="">
           <template slot-scope="scope">
+            <a type="text" :href="host.host+scope.row.guidBook" download="scope.row.guidBook">指导说明</a>
             <el-button type="text" @click="edit(scope.row)" size="small">编辑</el-button>
             <el-button type="text" @click="del(scope.row)" size="small">删除</el-button>
           </template>
@@ -39,11 +41,11 @@
         </el-form-item>
         <el-form-item label="实验时间">
           <el-col :span="11">
-            <el-date-picker type="datetime" placeholder="开始时间" v-model="ruleForm.start" style="width: 100%;"></el-date-picker>
+            <el-date-picker type="datetime" placeholder="开始时间" v-model="ruleForm.start" style="width: 100%;" value-format="MM-dd hh:mm"></el-date-picker>
           </el-col>
           <el-col class="line" :span="2">-</el-col>
           <el-col :span="11">
-            <el-date-picker type="datetime" placeholder="结束时间" v-model="ruleForm.end" style="width: 100%;"></el-date-picker>
+            <el-date-picker type="datetime" placeholder="结束时间" v-model="ruleForm.end" style="width: 100%;" value-format="MM-dd hh:mm"></el-date-picker>
           </el-col>
         </el-form-item>
         <el-form-item label="开课状态">
@@ -52,7 +54,11 @@
           </el-select>
         </el-form-item>
         <el-form-item label="指导说明" prop="title">
-          <el-input v-model="ruleForm.guidBook"></el-input>
+          <el-upload class="upload-demo" :action="importFileUrl" :on-preview="handlePreview" :on-remove="handleRemove" :before-remove="beforeRemove"
+            multiple :limit="1" :on-exceed="handleExceed" :file-list="fileList" :on-success="fileSuccess">
+            <el-button size="small" type="primary">点击上传</el-button>
+            <div slot="tip" class="el-upload__tip">只能上传zip,word,pdf,excel文件</div>
+          </el-upload>
         </el-form-item>
         <el-form-item label="指导教师" prop="teaID">
           <el-select v-model="ruleForm.teaID" placeholder="请选择院系">
@@ -61,24 +67,30 @@
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
-          <el-button @click="resetForm('ruleForm')">重置</el-button>
+          <el-button @click="editForm= false">取消</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
   </div>
-
 </template>
 
 <script>
   import store from '@/store/admin/exp.js';
-  import college from "../../../college.js"
+  import  host  from '../../../../../config/localhost.js';
+  import college from "../../../college.js";
+    import status from "../../../status.js";
   export default {
     name:"student",
     data() {
       return {
+        importFileUrl:host.host+"/api/admin/file",
          college:college,
+         status:status,
+         host:host,
+           teacherList:"",
           tableData: [],
           editForm:false,
+          fileList:[],
           ruleForm: {
             title: '',
             status: '',
@@ -116,7 +128,7 @@
     },
     methods: {
       del(d) {
-        store.delTeacher(d._id.toString()).then((r)=>{
+        store.delExp(d._id.toString()).then((r)=>{
           if(r.data.status == 1){
             this.$message({
               type:"success",
@@ -135,6 +147,10 @@
             })
           }         
         })
+      },
+      guidBook(d)
+      {
+          
       },
       edit(d){
         this.editForm = true;
@@ -181,6 +197,22 @@
             return false;
           }
         });
+      },
+      fileSuccess(res, file, fileList)
+      {
+        this.ruleForm.guidBook= res.message.path;
+      },
+      handleRemove(file, fileList) {
+        console.log(file, fileList);
+      },
+      handlePreview(file) {
+        console.log(file);
+      },
+      handleExceed(files, fileList) {
+        this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
+      },
+      beforeRemove(file, fileList) {
+        return this.$confirm(`确定移除 ${ file.name }？`);
       }
 
     },
@@ -192,6 +224,7 @@
             }
         })
     }
+
   }
 </script>
 
