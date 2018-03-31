@@ -281,9 +281,18 @@ router.post("/addexp", function (req, res, next) {
 })
 //学生列表
 router.get("/explist", function (req, res, next) {
-    Exp.find().then((r) => {
-        res.send(r);
-    })
+    if (req.query.teacher_name) {
+        Exp.find({
+            teaID: req.query.teacher_name
+        }).then((r) => {
+                res.send(r)
+        })
+    } else {
+        Exp.find().then((r) => {
+            res.send(r);
+        })
+    }
+
 })
 
 router.post("/delexp", function (req, res, next) {

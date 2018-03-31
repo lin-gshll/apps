@@ -12,9 +12,16 @@ module.exports = new schema({
     },
     start: String,
     end: String,
+    place:String,
     maxStu: {
         type: Number,
         default: 100
     },
-    guidBook: String
+    guidBook: String,
+    originalname:String,
+    instru:
+    {
+        type:String,
+        default:""
+    }
 })

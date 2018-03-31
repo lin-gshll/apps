@@ -1,0 +1,235 @@
+html,
+body {
+  width: 100%;
+  height: 100%;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+/*按钮*/
+button:hover,
+[class^="btn-"]:hover{
+    cursor: pointer;
+}
+.btn-normal{
+    padding: 0 10px;
+    height: 26px;
+    line-height: 24px;
+    font-size: 14px;
+    color: #686868;
+    border: 1px solid #e2e2e2;
+    background-color: #fff;
+}
+.btn-normal:hover{
+    color: #20bf94;
+}
+
+/**
+* 公共样式
+* font
+* text
+* color
+* line-height
+*/
+a:hover{
+    text-decoration: none;
+}
+button:focus,
+input:focus{
+    outline: none;
+}
+input[type="button"],
+button{
+    border:none;
+}
+/* 常用元素处理 */
+i,
+span[class^="icon-"],
+label{
+    display: inline-block;
+}
+label > i,
+label > input,
+label > a,
+label > span{
+    vertical-align: middle;
+}
+ul,
+ol,
+div{
+    box-sizing: border-box;
+}
+/* 行高 */
+.l-h-60{
+    height: 60px;
+    line-height: 60px;
+}
+.l-h-50{
+    height: 50px;
+    line-height: 50px;
+}
+.l-h-46{
+    height: 46px;
+    line-height: 46px;  
+}
+.l-h-45{
+    height: 45px;
+    line-height: 45px;  
+}
+.l-h-40{
+    height: 40px;
+    line-height: 40px;
+}
+.l-h-30{
+    height: 30px;
+    line-height: 30px;
+}
+/* 字号 */
+.ft-0{
+    font-size: 0;
+}
+.ft-12-b,
+.ft-12{
+    font-size: 12px;
+}
+.ft-14-b,
+.ft-14{
+    font-size: 14px;
+}
+.ft-16-b,
+.ft-16{
+    font-size: 16px;
+}
+.ft-18-b,
+.ft-18{
+    font-size: 18px;
+}
+.ft-20-b,
+.ft-20{
+    font-size: 20px;
+}
+.ft-22-b,
+.ft-22{
+    font-size: 22px;
+}
+.ft-24-b,
+.ft-24{
+    font-size: 24px;
+}
+.ft-30-b,
+.ft-30{
+    font-size: 30px;
+}
+.ft-12,
+.ft-14,
+.ft-16,
+.ft-18,
+.ft-20,
+.ft-22,
+.ft-24,
+.ft-30{
+    font-weight: normal;
+}
+.ft-12-b,
+.ft-14-b,
+.ft-16-b,
+.ft-18-b,
+.ft-20-b,
+.ft-22-b,
+.ft-24-b,
+.ft-30-b{
+    font-weight: bold;
+}
+
+/* 文本样式 */
+.text-center{
+    text-align: center;
+}
+.text-left{
+    text-align: left;
+}
+.text-right{
+    text-align: right;
+}
+.text-ellipsis{
+    display: inline-block;
+    width: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+/* 字体颜色 */
+.text-warning,
+.text-orange{
+    color: #ff7546;
+}
+.text-danger,
+.text-red{
+    color: #de5347;
+}
+.text-green{
+    color: #05bb8a;
+}
+.text-white{
+    color: #fff;
+}
+.text-grey{
+    color: #ddd3cd;
+}
+.text-deepgrey{
+    color: #808080;
+}
+
+/* 背景色 */
+.bg-deepgrey{
+    background-color: #808080;
+}
+.bg-grey{
+    background-color: #f4f4f4;
+}
+.bg-lightgrey{
+    background-color: #cccccc;
+}
+.bg-white{
+    background-color: #fff;
+}
+.bg-green{
+    background-color: #06bc9c;
+}
+.bg-yellow{
+    background-color: #fbab00;
+}
+
+/* 浮动 */
+.clearfix::after {
+    display: block;
+    clear: both;
+    content: "";
+}
+.fr{
+    float: right;
+}
+.fl{
+    float: left;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-space {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
