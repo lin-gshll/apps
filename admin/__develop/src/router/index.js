@@ -13,6 +13,9 @@ import addexp from "@/components/admin/page/exp/add"
 //教师
 import loginteacher from '@/components/teacher/login'
 import teacherindex from '@/components/teacher/index'
+//学生
+import loginstudent from '@/components/student/login'
+import studentindex from '@/components/student/index'
 
 Vue.use(Router)
 
@@ -85,6 +88,18 @@ export default new Router({
       path: '/teacher/index',
       name: '',
       component: teacherindex,
+      hidden: true
+    },
+     {
+      path: '/student',
+      name: '',
+      component: loginstudent,
+      hidden: true
+    },
+    {
+      path: '/student/index',
+      name: '',
+      component: studentindex,
       hidden: true
     },
   ]

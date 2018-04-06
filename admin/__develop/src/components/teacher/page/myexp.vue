@@ -31,7 +31,7 @@
     <el-dialog title="修改实验说明" :visible.sync="dialogTableVisible">
       <el-form ref="form" :model="form" label-position="top" label-width="80px" center="center">
         <el-form-item>
-          <el-input type="textarea" v-model="form.instru" :rows="5" placeholder="暂无实验说明"></el-input>
+          <el-input type="textarea" style="" v-model="form.instru" :rows="5" placeholder="暂无实验说明"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onSubmit">立即创建</el-button>
@@ -100,6 +100,9 @@
 <style scoped>
   .title-ban {
     width: 100%;
+  }
+  textarea{
+     white-space: pre-wrap !important;
   }
 
 </style>

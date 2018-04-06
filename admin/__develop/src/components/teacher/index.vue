@@ -17,7 +17,6 @@
     </div>
   </div>
 </template>
-
 <script>
 import titleban from './page/titleban'
 import myexp from './page/myexp'

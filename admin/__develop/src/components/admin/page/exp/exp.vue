@@ -21,7 +21,7 @@
           <template slot-scope="scope">
             <a type="text" :href="host.host+scope.row.guidBook" download="scope.row.guidBook">指导说明</a>
             <el-button type="text" @click="edit(scope.row)" size="small">编辑</el-button>
-            <el-button type="text" @click="del(scope.row)" size="small">删除</el-button>
+            <el-button type="text" @click="del(scope.row,scope.$index)" size="small">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -131,19 +131,15 @@
         
     },
     methods: {
-      del(d) {
+      del(d,i) {
         store.delExp(d._id.toString()).then((r)=>{
           if(r.data.status == 1){
+            this.tableData.splice(i,1);
             this.$message({
               type:"success",
               message:r.data.message
             })   
-            for(var i=0;i<this.tableData.length;i++){
-              if(this.tableData[i]._id == d._id.toString())
-              {
-                this.tableData.splice(i,1);
-              }
-            }
+           
           } else{
              this.$message({
               type:"error",

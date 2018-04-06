@@ -9,7 +9,7 @@
     name:"title-ban",
     data() {
       return {
-
+          
       }
     }
   }

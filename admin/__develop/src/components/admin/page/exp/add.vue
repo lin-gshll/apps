@@ -146,7 +146,7 @@ import  host  from '../../../../../config/localhost.js';
       fileSuccess(res, file, fileList)
       {
         this.ruleForm.guidBook= res.message.path;
-       this.ruleForm.originalname=res.message.originalname;
+        this.ruleForm.originalname=res.message.originalname;
       },
       handleRemove(file, fileList) {
         console.log(file, fileList);
