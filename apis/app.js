@@ -20,6 +20,7 @@ app.use("/api/exp", require('./routers/exp'));
 app.use("/api/admin", require('./routers/admin'));
 app.use("/api/class", require('./routers/class'));
 app.use("/upload", require('./routers/upload'));
+app.use("/work_file", require('./routers/work_file'));
 mongoose.connect(config.mongodb.db, function(err) {
     if (err) {
         console.log("数据库连接失败", err);

@@ -81,8 +81,7 @@
 				collapsed:false,
 				sysUserName: '',
 				sysUserAvatar: '',
-        username:"1"
-        ,
+        username:"admin",
 				form: {
 					name: '',
 					region: '',

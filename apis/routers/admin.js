@@ -2,6 +2,7 @@ let express = require("express");
 let Admin = require("../models/admin.js");
 let Teacher = require("../models/teacher");
 let Student = require("../models/student");
+let Score = require("../models/score");
 var multer = require('multer')
 var upload = multer({
     dest: 'upload_tmp/'
@@ -82,21 +83,33 @@ router.post("/addteacher", function (req, res, next) {
                 }
             })
     } else { //添加
-        req.body.password = md5(req.body.password);
-        let item = new Teacher(req.body);
-        item.save().then((r) => {
-            if (r._id) {
-                res.send({
-                    status: 1,
-                    message: "ok"
-                })
-            } else {
+        Teacher.find({
+            name: req.body.name
+        }, function (err, r) {
+            if (r.length > 0) {
                 res.send({
                     status: -1,
-                    message: "error"
+                    message: "教师已存在"
+                })
+            } else {
+                req.body.password = md5(req.body.password);
+                let item = new Teacher(req.body);
+                item.save().then((r) => {
+                    if (r._id) {
+                        res.send({
+                            status: 1,
+                            message: "ok"
+                        })
+                    } else {
+                        res.send({
+                            status: -1,
+                            message: "error"
+                        })
+                    }
                 })
             }
         })
+
 
     }
 })
@@ -108,7 +121,6 @@ router.get("/teacherlist", function (req, res, next) {
 })
 //删除教师
 router.post("/delteacher", function (req, res, next) {
-    console.log(req.body);
     let id = req.body._id || "";
     Teacher.findOne({
         _id: id
@@ -155,6 +167,7 @@ router.post("/addstudent", function (req, res, next) {
     if (_id) { //修改
         delete req.body._id;
         delete req.body._v;
+        req.body.password = md5(req.body.password);
         let temp = req.body;
         Student.findByIdAndUpdate(_id,
             temp,
@@ -172,19 +185,29 @@ router.post("/addstudent", function (req, res, next) {
                 }
             })
     } else { //添加
-        req.body.password = md5(req.body.password);
-        console.log(req.body);
-        let item = new Student(req.body);
-        item.save().then((r) => {
-            if (r._id) {
-                res.send({
-                    status: 1,
-                    message: "ok"
-                })
-            } else {
+        Student.find({
+            no: req.body.no
+        }, function (err, r) {
+            if (r.length > 0) {
                 res.send({
                     status: -1,
-                    message: "error"
+                    message: "学生已存在"
+                })
+            } else {
+                req.body.password = md5(req.body.password);
+                let item = new Student(req.body);
+                item.save().then((r) => {
+                    if (r._id) {
+                        res.send({
+                            status: 1,
+                            message: "ok"
+                        })
+                    } else {
+                        res.send({
+                            status: -1,
+                            message: "服务器错误"
+                        })
+                    }
                 })
             }
         })
@@ -252,7 +275,7 @@ router.post("/addexp", function (req, res, next) {
                 if (err) {
                     res.send({
                         status: -1,
-                        message: "error"
+                        message: "服务器错误"
                     })
                 } else {
                     res.send({
@@ -262,18 +285,35 @@ router.post("/addexp", function (req, res, next) {
                 }
             })
     } else { //添加
-        let item = new Exp(req.body);
-        item.save().then((r) => {
-            if (r._id) {
-                res.send({
-                    status: 1,
-                    message: "ok"
-                })
-            } else {
+        Exp.find({
+            $or: [{
+                no: req.body.no
+            }, {
+                title: req.body.title
+            }]
+        }, function (err, r) {
+            if (r.length > 0) {
                 res.send({
                     status: -1,
-                    message: "error"
+                    message: "实验已存在"
                 })
+            } else {
+                let item = new Exp(req.body);
+                item.save().then((r) => {
+                    if (r._id) {
+                        res.send({
+                            status: 1,
+                            message: "ok"
+                        })
+                    } else {
+                        res.send({
+                            status: -1,
+                            message: "服务器错误"
+                        })
+                    }
+                })
+
+
             }
         })
 
@@ -285,7 +325,39 @@ router.get("/explist", function (req, res, next) {
         Exp.find({
             teaID: req.query.teacher_name
         }).then((r) => {
-                res.send(r)
+            res.send(r)
+        })
+    } else if (req.query.keys) {
+        var reg = new RegExp(req.query.keys, 'ig');
+        Exp.find({
+            $or: [
+                {
+                    "title": {
+                        $regex: reg
+                    }
+                },
+                {
+                    "teaID": {
+                        $regex: reg
+                    }
+                }, {
+                    "college": {
+                        $regex: reg
+                    }
+                }, {
+                    "instru": {
+                        $regex: reg
+                    }
+                }, {
+                    "no": {
+                        $regex: reg
+                    }
+                }
+
+            ]
+        }, function (err, r) {
+            console.log(r);
+            res.send(r);
         })
     } else {
         Exp.find().then((r) => {
@@ -300,7 +372,6 @@ router.post("/delexp", function (req, res, next) {
     Exp.findOne({
         _id: id
     }, function (err, r) {
-
         if (err) {
             res.send({
                 status: 504,
@@ -308,21 +379,26 @@ router.post("/delexp", function (req, res, next) {
             })
         }
         if (r) {
-            Exp.remove({
-                _id: id
-            }, function (err, r) {
-                if (err) {
-                    res.send({
-                        status: 0,
-                        message: "删除失败"
-                    })
-                } else {
-                    res.send({
-                        status: 1,
-                        message: "删除成功"
-                    })
-                }
-            })
+            Score.remove({
+                expID: id
+            }).then(function () {
+                Exp.remove({
+                    _id: id
+                }, function (err, r) {
+                    if (err) {
+                        res.send({
+                            status: 0,
+                            message: "删除失败"
+                        })
+                    } else {
+                        res.send({
+                            status: 1,
+                            message: "删除成功"
+                        })
+                    }
+                })
+            });
+
         } else {
             res.send({
                 status: -1,

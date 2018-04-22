@@ -41,11 +41,11 @@
         </el-form-item>
         <el-form-item label="实验时间">
           <el-col :span="11">
-            <el-date-picker type="datetime" placeholder="开始时间" v-model="ruleForm.start" style="width: 100%;" value-format="MM-dd hh:mm"></el-date-picker>
+            <el-date-picker type="datetime" placeholder="开始时间" v-model="ruleForm.start" style="width: 100%;" value-format="yyyy-MM-dd hh:mm"></el-date-picker>
           </el-col>
           <el-col class="line" :span="2">-</el-col>
           <el-col :span="11">
-            <el-date-picker type="datetime" placeholder="结束时间" v-model="ruleForm.end" style="width: 100%;" value-format="MM-dd hh:mm"></el-date-picker>
+            <el-date-picker type="datetime" placeholder="结束时间" v-model="ruleForm.end" style="width: 100%;" value-format="yyyy-MM-dd hh:mm"></el-date-picker>
           </el-col>
         </el-form-item>
         <el-form-item label="实验地点" prop="place">
@@ -182,7 +182,7 @@
                     this.$message(
                         {
                             type:"error",
-                            message:"修改失败"
+                            message:r.data.message
                         }
                     )
                 }

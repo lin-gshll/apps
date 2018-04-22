@@ -1,6 +1,7 @@
 <template>
   <div class="title-ban">
-      <div class="flex-space l-h-60 bg-green">   
+      <div class="flex-space l-h-60 bg-green text-center ft-30 ft-30-b">  
+        假装有个LOGO 
       </div>
   </div>
 </template>

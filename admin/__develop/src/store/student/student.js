@@ -2,7 +2,7 @@ import axios from 'axios';
 import qs from 'qs';
 import localhost from '../../../config/localhost'
 // 登录api
-let login = {
+let student = {
   apis: {
     // 登录接口
     get_list: localhost.host + '/api/admin/explist',
@@ -10,6 +10,8 @@ let login = {
     app_exp: localhost.host + '/api/student/appexp',
     get_myexp: localhost.host + '/api/student/myexp',
     del_exp: localhost.host + '/api/student/delexp',
+    upload_file:localhost.host + '/api/student/file',
+    addworkfile:localhost.host + '/api/student/addworkfile'
   },
 
   params: {
@@ -24,10 +26,10 @@ let login = {
   },
 
   state: {},
-  getList(teacher_name) {
+  getList(keys) {
     return axios.get(this.apis.get_list, {
       params: {
-        teacher_name: teacher_name
+        keys: keys
       }
     }).then((r) => {
       return r;
@@ -47,9 +49,14 @@ let login = {
      return axios.post(this.apis.del_exp, qs.stringify(info)).then((r) => {
       return r;
     })
+  },
+  add_work(info){
+     return axios.post(this.apis.addworkfile, qs.stringify(info)).then((r) => {
+      return r;
+    })
   }
 
 }
 
 
-export default login;
+export default student;

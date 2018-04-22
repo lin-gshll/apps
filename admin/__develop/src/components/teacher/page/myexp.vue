@@ -15,7 +15,7 @@
         </el-table-column>
         <el-table-column label="指导说明" width="">
           <template slot-scope="scope">
-            <a type="text" :href="host.host+scope.row.guidBook" download="scope.row.guidBook">{{scope.row.originalname}}</a>
+            <a type="text" :href="host.host+scope.row.guidBook" download="true">{{scope.row.originalname}}</a>
           </template>
         </el-table-column>
         <el-table-column prop="place" label="实验地点" width="">
@@ -23,7 +23,8 @@
         <el-table-column label="操作" width="">
           <template slot-scope="scope">
             <el-button type="text" @click="addDesc(scope.row)" size="small">添加实验说明</el-button>
-            <!--<el-button type="text" @click="del(scope.row)" size="small">删除</el-button>-->
+               <el-button type="text" @click="goWork(scope.row)" size="small">查看学生作业</el-button>
+        
           </template>
         </el-table-column>
       </el-table>
@@ -31,7 +32,7 @@
     <el-dialog title="修改实验说明" :visible.sync="dialogTableVisible">
       <el-form ref="form" :model="form" label-position="top" label-width="80px" center="center">
         <el-form-item>
-          <el-input type="textarea" style="" v-model="form.instru" :rows="5" placeholder="暂无实验说明"></el-input>
+          <el-input type="textarea"  v-model="form.instru" :rows="6" placeholder="暂无实验说明"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onSubmit">立即创建</el-button>
@@ -46,10 +47,10 @@
   import  host  from '../../../../config/localhost.js';
     export default {
     name:"myexp",
+    props:["tableData"],
     data() {
       return {
           login_info:JSON.parse(this.$route.query.login_info),
-          tableData:[],
           host:host,
           dialogTableVisible:false,
           form:
@@ -62,10 +63,7 @@
     mounted:function()
     {
         
-        store.getList(this.login_info.recodeset.username).then((r)=>{
-           // Object.assign(this.tableData,r.data);
-            this.tableData = r.data
-        })
+    
     },
     methods:{
         addDesc(d){
@@ -73,6 +71,24 @@
             this.form._id = d._id;
             this.dialogTableVisible = true;
         },
+        goWork(d){
+          var info = JSON.parse(sessionStorage.getItem('tea_info'));
+          this.$emit("workInfo",d._id);
+          // this.$router.push({
+          //   path:"/teacher/index",
+          //   query:{
+          //     login_info:this.$route.query.login_info,
+          //     status:"3",
+          //     expID:d._id}
+          //   });
+
+
+
+            //window.open(`http://localhost:8080/#/teacher/index?
+            //login_info=${this.$route.query.login_info}&status=3&expID=${d._id}
+            // `);
+        }
+        ,
         onSubmit(){
             store.edit_exp(this.form).then((r)=>{
                 if(r.data.status == 1)

@@ -87,7 +87,7 @@ import college from "../../../college.js"
                     this.$message(
                         {
                             type:"error",
-                            message:"失败"
+                            message:r.data.message
                         }
                     )
                 }

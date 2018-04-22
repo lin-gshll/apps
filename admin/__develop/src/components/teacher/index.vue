@@ -4,13 +4,19 @@
     <div class="active">
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane label="我的实验" name="first">
-          <myexp></myexp>
+          <myexp :tableData="tableData" @workInfo="workInfo"></myexp>
         </el-tab-pane>
         <el-tab-pane label="学生成绩" name="second">
-          <scorelist></scorelist>
+          <scorelist :echartData="echartData" @workInfo="workInfo"></scorelist>
         </el-tab-pane>
         <el-tab-pane label="查看学生作业" name="third">
-          <homework></homework>
+          <div style="width:60%;margin-bottom:20px;">
+            <el-input placeholder="请实验名称、编号或者学生名字、编号" v-model="searchTxt" class="input-with-select">
+              <el-button slot="append" icon="el-icon-search" @click="searchExp()"></el-button>
+            </el-input>
+         
+          </div>
+          <homework :tableWork="tableWork"></homework>
         </el-tab-pane>
         <el-tab-pane label="其他" name="fourth">定时任务补偿</el-tab-pane>
       </el-tabs>
@@ -22,17 +28,53 @@ import titleban from './page/titleban'
 import myexp from './page/myexp'
 import scorelist from './page/scorelist'
 import homework from './page/homework';
+import store from '../../store/teacher/teacher.js'
+import  host  from '../../../config/localhost.js';
 
   export default {
     name:"index",
     data() {
       return {
-        activeName:"first"
+        activeName:"first",
+        login_info:JSON.parse(this.$route.query.login_info),
+        tableData:[],
+        tableWork:[],
+        echartData:[],
+        searchTxt:""
       };
     },
     methods: {
       handleClick(key, keyPath) {
-        console.log(key, keyPath);
+          if(key.index == 2){
+              //获取实验作业
+            store.get_work({teaID:this.login_info.recodeset.username}).then((r)=>{
+              // Object.assign(this.tableData,r.data);
+                this.tableWork = r.data;
+            })
+          }
+          store.get_score().then((r)=>{
+               this.echartData = r.data;
+          });
+            
+
+      },
+      workInfo(p,temp){
+         this.activeName = "third";
+         if(temp == 1){
+          store.get_work({teaID:this.login_info.recodeset.username,title:p}).then((r)=>{
+            this.tableWork = r.data
+        })
+         }else{
+          store.get_work({teaID:this.login_info.recodeset.username,expID:p}).then((r)=>{
+                this.tableWork = r.data
+           })
+         }
+    
+      },
+      searchExp(){
+         store.get_work({teaID:this.login_info.recodeset.username,keys:this.searchTxt}).then((r)=>{
+            this.tableWork = r.data
+        })
       }
     },
     components:
@@ -41,6 +83,17 @@ import homework from './page/homework';
       myexp,
       scorelist,
       homework
+    },
+    mounted:function(){
+       //获取所有实验
+       store.getList(this.login_info.recodeset.username).then((r)=>{
+            this.tableData = r.data;
+        });
+        //获取实验作业
+        store.get_work({teaID:this.login_info.recodeset.username}).then((r)=>{
+            this.tableWork = r.data
+        });
+      
     }
   }
 </script>
@@ -49,6 +102,7 @@ import homework from './page/homework';
   .active {
     margin: 10px auto;
     width: 80%;
+
   }
 
 </style>

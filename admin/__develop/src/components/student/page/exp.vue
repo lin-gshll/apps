@@ -8,16 +8,18 @@
         </el-table-column>
         <el-table-column prop="college" label="开课学院" width="">
         </el-table-column>
-        <el-table-column prop="start" label="状态" width="">
-          <template slot-scope="scope">
-          {{scope.row.end}}
-          </template>
+        <el-table-column prop="status" label="状态" width="">
+            <template slot-scope="scope">
+          <span
+          :class="scope.row.status === '进行中' ? 'success' : 'primary'"
+          close-transition>{{scope.row.status}}</span>
+      </template>
         </el-table-column>
-        <el-table-column prop="score" label="分数" width="">
-        </el-table-column>
+        <!--<el-table-column prop="score" label="分数" width="">
+        </el-table-column>-->
         <el-table-column label="实验说明与作业" width="">
           <template slot-scope="scope">
-            <el-button type="text" @click="desc(scope.row)" size="small">作业</el-button>
+            <el-button type="text" @click="desc(scope.row)" size="small">《{{scope.row.title}}》课后作业</el-button>
           </template>
         </el-table-column>
         <el-table-column label="操作" width="">
@@ -39,9 +41,9 @@
   import  store  from '@/store/student/student.js';
     export default {
     name:"explist",
+    props:["tableData"],
     data() {
       return {
-          tableData:[],
           host:host,
           dialogTableVisible:false,
           instru:"",
@@ -51,13 +53,7 @@
     },
     mounted:function()
     {
-         let stu_info = JSON.parse(sessionStorage.getItem("stu_info"));
-          let param={
-              "stuID":stu_info.login_info.recodeset._id,
-          }
-        store.get_myexp(param).then((r)=>{
-            this.tableData = r.data
-        })
+         console.log(this.tableData);
     },
     methods:{
         desc(d){
@@ -66,7 +62,6 @@
             this.dialogTableVisible = true;
         },
         delWork(d,i,rows){
-          console.log(i);
           store.del_exp({"_id":d._id,"stuID":d.stuID}).then((r)=>{
             if(r.data.status == 1){
               rows.splice(i,1);
@@ -79,7 +74,6 @@
                 type:"error",
                 message:r.data.message
               });
-         
             }
           })
         }
@@ -91,6 +85,12 @@
   .title-ban {
     width: 100%;
 
+  }
+  .primary{
+    color:#409EFF;
+  }
+  .success{
+    color:#67C23A;
   }
 
 </style>

@@ -153,7 +153,7 @@ import college from "../../../college.js"
                     this.$message(
                         {
                             type:"error",
-                            message:"修改失败"
+                            message:r.data.message
                         }
                     )
                 }

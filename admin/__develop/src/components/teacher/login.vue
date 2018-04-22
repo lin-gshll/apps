@@ -59,6 +59,9 @@
               type:"success",
               message:"登录成功"
             });
+            sessionStorage.setItem('tea_info',JSON.stringify({
+                  login_info:r.data
+                }));
             this.$router.push(
               {
                 path:"teacher/index",

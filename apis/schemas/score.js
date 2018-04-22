@@ -3,18 +3,28 @@ let schema = mongoose.Schema;
 module.exports = new schema({
     stuID: String,
     score: {
-        type: String,
-        default:"0"
+        type: Number,
+        default: -1
     },
-    status: Number,
+    stuName:String,
+    stuNo:String,
+    status: String,
     expID: String,
-    teaID:String,
-    no:String,
-    teaID:String,
-    instru:String,
-    title:String,
-    college:String,
-    end:String,
+    teaID: String,
+    no: String,
+    instru: String,
+    title: String,
+    college: String,
+    start: String,
+    end: String,
+    workpath: {
+        type: String,
+        default: ""
+    },
+    originalname: {
+        type: String,
+        default: ""
+    },
     created: {
         type: Date,
         default: Date.now()

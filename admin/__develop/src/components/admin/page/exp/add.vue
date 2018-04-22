@@ -14,11 +14,11 @@
       </el-form-item>
       <el-form-item label="实验时间">
         <el-col :span="11">
-          <el-date-picker type="datetime" placeholder="开始时间" v-model="ruleForm.start" style="width: 100%;" value-format="MM-dd HH:mm"></el-date-picker>
+          <el-date-picker type="datetime" placeholder="开始时间" v-model="ruleForm.start" style="width: 100%;" value-format="yyyy-MM-dd HH:mm"></el-date-picker>
         </el-col>
         <el-col class="line" :span="2">-</el-col>
         <el-col :span="11">
-          <el-date-picker type="datetime" placeholder="结束时间" v-model="ruleForm.end" style="width: 100%;" value-format="MM-dd HH:mm"></el-date-picker>
+          <el-date-picker type="datetime" placeholder="结束时间" v-model="ruleForm.end" style="width: 100%;" value-format="yyyy-MM-dd HH:mm"></el-date-picker>
         </el-col>
       </el-form-item>
       <el-form-item label="实验地点" prop="place">
@@ -124,7 +124,7 @@ import  host  from '../../../../../config/localhost.js';
                     this.$message(
                         {
                             type:"error",
-                            message:"失败"
+                            message:r.data.message
                         }
                     )
                 }

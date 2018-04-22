@@ -1,7 +1,7 @@
 <template>
   <div class="explist">
     <el-container>
-      <el-table :data="tableData" border>
+      <el-table :data="tableExp" border>
         <el-table-column prop="no" label="编号" width="">
         </el-table-column>
         <el-table-column prop="title" label="实验名称" width="">
@@ -45,9 +45,9 @@
   import  store  from '@/store/student/student.js';
     export default {
     name:"explist",
+    props:["tableExp"],
     data() {
       return {
-          tableData:[],
           host:host,
           dialogTableVisible:false,
           instru:"",
@@ -57,11 +57,7 @@
     },
     mounted:function()
     {
-          
-        store.getList().then((r)=>{
-           // Object.assign(this.tableData,r.data);
-            this.tableData = r.data
-        })
+        
     },
     methods:{
         desc(d){
@@ -73,19 +69,30 @@
           let stu_info = JSON.parse(sessionStorage.getItem("stu_info"));
           console.log(stu_info);
           console.log(d);
-          let param={
-              "stuID":stu_info.login_info.recodeset._id,
-               "expID":d._id,
-               "status":0,
-               "teaID":d.teaID,
-               "title":d.title,
-               "no":d.no,
-               "instru":d.instru,
-               "college":d.college,
-               "end":d.end
+          let param={};
+          if(d.instru != ""){
+               param={
+                    "stuID":stu_info.login_info.recodeset._id,
+                    "stuName":stu_info.login_info.recodeset.username,
+                    "stuNo":stu_info.login_info.recodeset.stuNo,
+                    "expID":d._id,
+                    "status":0,
+                    "teaID":d.teaID,
+                    "title":d.title,
+                    "no":d.no,
+                    "instru":d.instru,
+                    "college":d.college,
+                    "start":d.start,
+                    "end":d.end
+                }
+          }else{
+              this.$message({
+                type:"error",
+                message:"请联系教师安排上课才能预约！"
+             })
+             return false;
           }
           store.add_exp(param).then((r=>{
-            console.log(r);
             if(r.data.status == -1)
             {
               this.$message({
