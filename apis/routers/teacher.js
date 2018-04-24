@@ -147,7 +147,127 @@ router.post("/score", function (req, res, next) {
 
             res.send(r);
         })
+    })
+})
 
+router.post("/scoredetail", function (req, res, next) {
+    let title = req.body.title;
+    Score.aggregate().match({
+        title: title,
+        score: {
+            $gte: 0,
+            $lte: 59
+        }
+    }).group({
+        _id: '$title',
+        count: {
+            $sum: 1
+        },
+        avg: {
+            $avg: "$score"
+        },
+    }).exec(function (err, r) {
+        Score.aggregate().match({
+            title: title,
+            score: {
+                $gte: 60,
+                $lte: 79
+            }
+        }).group({
+            _id: '$title',
+            count: {
+                $sum: 1
+            },
+            avg: {
+                $avg: "$score"
+            },
+        }).exec(function (err, r1) {
+            Score.aggregate().match({
+                title: title,
+                score: {
+                    $gte: 80,
+                    $lte: 89
+                }
+            }).group({
+                _id: '$title',
+                count: {
+                    $sum: 1
+                },
+                avg: {
+                    $avg: "$score"
+                },
+            }).exec(function (err, r2) {
+                Score.aggregate().match({
+                    title: title,
+                    score: {
+                        $gte: 90,
+                        $lte: 100
+                    }
+                }).group({
+                    _id: '$title',
+                    count: {
+                        $sum: 1
+                    },
+                    avg: {
+                        $avg: "$score"
+                    },
+                }).exec(function (err, r3) {
+                    let arr = [];
+                    
+                    if (r.length > 0) {
+                    
+                        arr.push({
+                            value: r[0].count,
+                            name: "0 ~ 59"
+                        })
+                    } else {
+                        arr.push({
+                            value: 0,
+                            name: "0 ~ 59"
+                        })
+                    }
+
+                    if (r1.length > 0) {
+                        arr.push({
+                            value: r1[0].count,
+                            name: "60 ~ 79"
+                        })
+                    } else {
+                        arr.push({
+                            value: 0,
+                            name: "60 ~ 79"
+                        })
+                    }
+
+
+                    if (r2.length > 0) {
+                        arr.push({
+                            value: r2[0].count,
+                            name: "80 ~ 89"
+                        })
+                    } else {
+                        arr.push({
+                            value: 0,
+                            name: "80 ~ 89"
+                        })
+                    }
+
+                    if (r3.length > 0) {
+                        arr.push({
+                            value: r3[0].count,
+                            name: "90 ~ 100"
+                        })
+                    } else {
+                        arr.push({
+                            value: 0,
+                            name: "90 ~ 100"
+                        })
+                    }
+                    arr.push(title);
+                    res.send(arr);
+                })
+            })
+        })
 
     })
 

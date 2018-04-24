@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+
+import indexC from "../components/index.vue"
 //管理员
 import loginadmin from '@/components/admin/login'
 import index from "@/components/admin/index"
@@ -21,7 +23,13 @@ import studentindex from '@/components/student/index'
 Vue.use(Router)
 
 export default new Router({
-  routes: [{
+  routes: [
+    {
+      path: '/',
+      name: '',
+      component: indexC,
+      hidden: true
+    },{
       path: '/admin',
       name: '',
       component: loginadmin,

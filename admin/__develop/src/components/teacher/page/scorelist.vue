@@ -1,8 +1,18 @@
 <template>
   <div class="scorelist">
-    <el-row>
-      <div id="chartColumn" style="width:100%; height:400px;" ref="echarts"></div>
-    </el-row>
+    <div >
+      <div v-if="isShow" id="chartColumn" style="width:100%; height:400px;" ref="echarts"></div>
+    </div>
+    <!--<div v-if="!isShow" style="height:30px;width:100%;float:right;text-align:right">
+        <el-button type="success" disabled>成功按钮</el-button>
+    </div>-->
+    <div v-if="!isShow">
+  
+       
+      <div id="chartPie" style="width:100%;height:400px;" ref="echartsPie">
+
+      </div>
+    </div>
   </div>
 </template>
 
@@ -14,9 +24,10 @@
         props:['echartData'],
         data() {
             return {
+              isShow:true,
                 chartColumn: null,
-                data1:""
-               
+                data1:"",
+                charts: null
             }
         },
         watch: {
@@ -40,13 +51,28 @@
                 this.chartColumn = echarts.init(document.getElementById('chartColumn'));
 
                 this.chartColumn.on("click",function(params){
-                    console.log(temp);
-                    if(temp){
-                        that.$emit("workInfo",params.name,1);
-                        temp=false;
-                    }
-                   
-                    return ;
+                    that.isShow = false;
+                    that.$nextTick(function() {
+                        store.get_scoreDetail({title:params.name}).then(r=>{
+                         let opinion=[],opinionData=[];
+                        
+                          for(var i=0;i<r.data.length-1;i++){
+                            opinion.push(r.data[i].name);
+                            opinionData.push(r.data[i]);
+                          }
+                         
+                          setTimeout(()=>{
+                             that.drawPie('chartPie',r.data[r.data.length-1],opinion,opinionData);
+                             that.charts.resize();  
+                         },10);
+                        })
+                       
+                     })
+                    // if(temp){
+                    //     that.$emit("workInfo",params.name,1);
+                    //     temp=false;
+                    // }
+                    // return ;
                 })
                 this.chartColumn.setOption({
                         title: { text: '实验成绩分布', x: 'center' },
@@ -89,9 +115,54 @@
                             barWidth : 30,//柱图宽度
                             }]
                     });
-                    
+            
+           } ,
+            drawPie:function(id,rTitle,opinion,opinionData){
+               this.charts = echarts.init(document.getElementById(id))
+               this.charts.setOption({
+                  title: {
+                      text: rTitle,
+                      x: 'left',   
+                      textStyle : {
 
-            }  
+                          fontSize : 25,
+                        }
+                  },
+                 tooltip: {
+                   trigger: 'item',
+                   formatter: '{a}<br/>{b}:{c} ({d}%)'
+                 },
+                 legend: {
+                     bottom: 10,
+                      left: 'center',
+                      data:opinion,
+                     textStyle : {
+            
+                          fontSize : 20,
+                        }
+                 },
+                 series: [
+                   {
+                      type: 'pie',
+                      radius : '65%',
+                      name:"学生成绩分布",
+                      center: ['50%', '50%'],
+                      selectedMode: 'single',
+                      data:opinionData
+                   }
+                 ],
+                itemStyle: {
+                emphasis: {
+                    shadowBlur: 10,
+                    shadowOffsetX: 0,
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+            }
+               })
+            }
+        },
+         mounted(){
+          
         }
               
     }

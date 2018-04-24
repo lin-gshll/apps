@@ -9,7 +9,8 @@ let login = {
     edit_exp: localhost.host + '/api/admin/addexp',
     get_work:localhost.host + '/api/teacher/work',
      correct:localhost.host + '/api/teacher/correct',
-     score:localhost.host + '/api/teacher/score'
+     score:localhost.host + '/api/teacher/score',
+     scoredetail:localhost.host + '/api/teacher/scoredetail',
   },
 
   params: {
@@ -52,8 +53,12 @@ let login = {
     return axios.post(this.apis.score).then((r) => {
       return r;
     })
+  },
+   get_scoreDetail(info){
+    return axios.post(this.apis.scoredetail,qs.stringify(info)).then((r) => {
+      return r;
+    })
   }
-
 }
 
 
