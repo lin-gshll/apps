@@ -1,7 +1,13 @@
 <template>
   <div class="index clearfix">
-    <div class="left">
-      调光贴膜是很实用的发明，他可以直接贴服在普通玻璃上使用，使其具有了调光玻璃所有的功能， 在很多参数上超过调光玻璃，投影方面尤其优秀。 调光贴膜具有运输方便，安装便捷；便于维护更换； 即贴即用等优点。
+    <div class="left" >
+      <div class="ft-18-b bg" >
+        最新公告
+      </div>
+      <div style=" white-space: pre-wrap;  padding-left:50px;">
+         {{desc}}
+      </div>
+     
     </div>
     <div class="right flex-center flex-space">
       <el-row>
@@ -11,7 +17,7 @@
         <el-button type="primary" plain @click="goAdmin()">管理员进入</el-button>
       </el-row>
       <el-row>
-        <el-button type="primary" plain @click="goTeacher()">教室进入</el-button>
+        <el-button type="primary" plain @click="goTeacher()">教师进入</el-button>
       </el-row>
     </div>
   </div>
@@ -19,12 +25,14 @@
 
 <script>
 
+import  store from '@/store/admin/info'
 
   export default {
     name:"index",
     data() {
         return {
-            "index":12
+            "index":12,
+            desc:""
         }
     },
     methods:{
@@ -37,30 +45,49 @@
           goTeacher(){
              this.$router.push({path:"teacher"})
         }
+    },
+    mounted:function(){
+      store.infoList().then((r)=>{
+            console.log(r.data);
+          this.desc = r.data[0].desc;
+        })
     }
   }
 </script>
 
 <style scoped>
+  body {
+    overflow: hidden;
+  }
+
   .index {
     width: 80%;
     margin: 20px auto;
+    overflow: hidden;
   }
 
   .left {
     float: left;
     width: 50%;
-    height: 300px;
-    margin: 100px 20px;
+    margin: 100px 10px;
     padding: 10px;
+  
   }
 
   .right {
     float: right;
-    width: 30%;
+    width: 40%;
     height: 300px;
     margin: 10px;
-
+  }
+  .right div{
+    margin-left: 20px;
+  }
+  .bg{
+    background: url('../assets/hot.png') no-repeat ;
+    background-position:0 2px;
+    background-size:20px 20px;  
+    padding-left:26px;
   }
 
 </style>

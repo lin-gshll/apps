@@ -6,6 +6,8 @@ import App from './App'
 import router from './router'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+// import pdf from '@/components/pdf'  
+// Vue.use(pdf)  
 
 
 Vue.use(ElementUI);
