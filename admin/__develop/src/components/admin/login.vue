@@ -59,15 +59,12 @@
               message:"登录成功"
             });
             var user = sessionStorage.setItem('user',JSON.stringify({
-                  login_info:r.data
+                   username:r.data.recodeset.username,
+                  _id:r.data.recodeset._id
                 }));
             this.$router.push(
               {
-                path:"admin/exp",
-                query:
-                {
-                  login_info:r.data
-                }
+                path:"admin/exp"
               }
             )
             

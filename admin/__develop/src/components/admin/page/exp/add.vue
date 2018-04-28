@@ -24,11 +24,11 @@
       <el-form-item label="实验地点" prop="place">
         <el-input v-model="ruleForm.place"></el-input>
       </el-form-item>
-      <el-form-item label="开课状态">
+      <!--<el-form-item label="开课状态">
         <el-select v-model="ruleForm.status" placeholder="请选择开课状态">
           <el-option v-for='(item,index) in status' :key="index" :label="item.name" :value="item.name"></el-option>
         </el-select>
-      </el-form-item>
+      </el-form-item>-->
       <el-form-item label="指导说明" prop="guidBook">
         <el-upload class="upload-demo" :action="importFileUrl" :on-preview="handlePreview" :on-remove="handleRemove" :before-remove="beforeRemove"
           multiple :limit="1" :on-exceed="handleExceed" :file-list="fileList" :on-success="fileSuccess">

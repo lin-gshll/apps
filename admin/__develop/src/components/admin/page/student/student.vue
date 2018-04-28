@@ -50,7 +50,7 @@
           <el-input v-model="ruleForm.class"></el-input>
         </el-form-item>
         <el-form-item label="设置密码" prop="password">
-          <el-input v-model="ruleForm.password"></el-input>
+          <el-input type="password" v-model="ruleForm.password"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
@@ -97,10 +97,14 @@ import college from "../../../college.js"
             { required: true, message: '请选择院系', trigger: 'change' }
           ],
            email: [
-            { required: true, message: '请输入邮箱', trigger: 'change' }
+            { required: true, message: '请输入邮箱', trigger: 'change' },
+            ,
+            { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
           ],
            password: [
-            { required: true, message: '请输入密码', trigger: 'change' }
+            { required: true, message: '请输入密码', trigger: 'change' },
+            ,
+            { type: 'password', message: '请输入正确的密码', trigger: ['blur', 'change'] }
           ]
         }
       }

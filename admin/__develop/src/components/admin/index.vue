@@ -13,8 +13,8 @@
         <el-dropdown trigger="hover">
           <span class="el-dropdown-link userinfo-inner"><img src="../../assets/logo.png" /> {{username}}</span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>我的消息</el-dropdown-item>
-            <el-dropdown-item>设置</el-dropdown-item>
+            <!--<el-dropdown-item>我的消息</el-dropdown-item>
+            <el-dropdown-item>设置</el-dropdown-item>-->
             <el-dropdown-item divided @click.native="logout">退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -113,7 +113,7 @@
 					//type: 'warning'
 				}).then(() => {
 					sessionStorage.removeItem('user');
-					_this.$router.push('/login');
+					_this.$router.push('/admin');
 				}).catch(() => {
 
 				});
@@ -130,7 +130,6 @@
 		},
 		mounted() {
 			var user = sessionStorage.getItem('user');
-      console.log(user);
 			if (user) {
 				user = JSON.parse(user);
 				this.username = user.username || 'admin';
