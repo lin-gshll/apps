@@ -12,6 +12,9 @@ import studentList from "@/components/admin/page/student/student"
 import addStudent from "@/components/admin/page/student/add"
 import expList from "@/components/admin/page/exp/exp"
 import addexp from "@/components/admin/page/exp/add"
+//公告信息
+import addInfo from '@/components/admin/page/info/info'
+import infoList from '@/components/admin/page/info/infolist'
 //教师
 import loginteacher from '@/components/teacher/login'
 import teacherindex from '@/components/teacher/index'
@@ -20,16 +23,17 @@ import preview from '@/components/preview/preview';
 import loginstudent from '@/components/student/login'
 import studentindex from '@/components/student/index'
 
+
+
 Vue.use(Router)
 
 export default new Router({
-  routes: [
-    {
+  routes: [{
       path: '/',
       name: '',
       component: indexC,
       hidden: true
-    },{
+    }, {
       path: '/admin',
       name: '',
       component: loginadmin,
@@ -83,6 +87,23 @@ export default new Router({
           path: '/admin/addteacher',
           component: addTeacher,
           name: '添加教师'
+        }
+      ]
+    },
+    {
+      path: '/index',
+      component: index,
+      name: '公告管理',
+      iconCls: 'el-icon-news',
+      children: [{
+          path: '/admin/infolist',
+          component: infoList,
+          name: '公告列表'
+        },
+        {
+          path: '/admin/info',
+          component: addInfo,
+          name: '添加公告'
         }
       ]
     },
