@@ -60,7 +60,7 @@
               message:"登录成功"
             });
             sessionStorage.setItem('tea_info',JSON.stringify({
-                  login_info:r.data
+                  username:r.data.recodeset.username
                 }));
             this.$router.push(
               {

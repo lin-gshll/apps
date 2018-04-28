@@ -18,7 +18,9 @@
           </div>
           <homework :tableWork="tableWork"></homework>
         </el-tab-pane>
-        <el-tab-pane label="其他" name="fourth">定时任务补偿</el-tab-pane>
+        <el-tab-pane label="个人信息维护" name="fourth">
+          <personal></personal>
+        </el-tab-pane>
       </el-tabs>
     </div>
   </div>
@@ -28,6 +30,7 @@ import titleban from './page/titleban'
 import myexp from './page/myexp'
 import scorelist from './page/scorelist'
 import homework from './page/homework';
+import personal from './page/personal';
 import store from '../../store/teacher/teacher.js'
 import  host  from '../../../config/localhost.js';
 
@@ -52,19 +55,24 @@ import  host  from '../../../config/localhost.js';
                 this.tableWork = r.data;
             })
           }
-          store.get_score().then((r)=>{
+          store.get_score({teaID:this.login_info.recodeset.username}).then((r)=>{
                this.echartData = r.data;
           });
             
 
       },
-      workInfo(p,temp){
+      workInfo(p,temp,s){
          this.activeName = "third";
          if(temp == 1){
           store.get_work({teaID:this.login_info.recodeset.username,title:p}).then((r)=>{
             this.tableWork = r.data
-        })
-         }else{
+          })
+        }else if(temp == 2){
+          let lt = s.split("~");
+           store.get_work({teaID:this.login_info.recodeset.username,title:p,lt:Number(lt[0]),lg:Number(lt[1])}).then((r)=>{
+            this.tableWork = r.data;
+          })
+        }else{
           store.get_work({teaID:this.login_info.recodeset.username,expID:p}).then((r)=>{
                 this.tableWork = r.data
            })
@@ -82,7 +90,8 @@ import  host  from '../../../config/localhost.js';
       titleban,
       myexp,
       scorelist,
-      homework
+      homework,
+      personal
     },
     mounted:function(){
        //获取所有实验

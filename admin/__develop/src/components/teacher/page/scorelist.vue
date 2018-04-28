@@ -1,15 +1,19 @@
 <template>
   <div class="scorelist">
-    <div >
-      <div v-if="isShow" id="chartColumn" style="width:100%; height:400px;" ref="echarts"></div>
-    </div>
-    <!--<div v-if="!isShow" style="height:30px;width:100%;float:right;text-align:right">
-        <el-button type="success" disabled>成功按钮</el-button>
-    </div>-->
-    <div v-if="!isShow">
-  
        
-      <div id="chartPie" style="width:100%;height:400px;" ref="echartsPie">
+    <div >
+      <div v-show="isShow" id="chartColumn" style="width:100%; height:400px;" ref="echarts"></div>
+    </div>
+   
+    <div v-show="!isShow">
+          <div style="height:10px;width:50%;float:right;text-align:right;margin-right:50px;z-index:1;">
+           <el-button type="success"  @click="lookSing()">查看成绩详细数据</el-button>
+      </div>
+      <div style="z-index:1;height:10px;width:50%;float:right;text-align:right;margin-right:50px;">
+           <el-button type="primary" style="margin-top:80px;" @click="lookAll()">查看所有实验数据</el-button>
+      </div>
+      
+      <div id="chartPie" style="width:80%;height:400px;" ref="echartsPie">
 
       </div>
     </div>
@@ -27,11 +31,13 @@
               isShow:true,
                 chartColumn: null,
                 data1:"",
-                charts: null
+                charts: null,
+                titleC:""
             }
         },
         watch: {
             echartData:function(){
+  
                 this.begin(this.echartData);
                 setTimeout(()=>{
                     this.chartColumn.resize();  
@@ -39,7 +45,19 @@
             }
         },
         methods:{
+            lookSing:function(){
+  
+                  this.$emit("workInfo",this.titleC,1);
+            },
+            lookAll:function(){
+                let that = this;
+                this.isShow = !this.isShow;
+                setTimeout(()=>{
+                    that.chartColumn.resize(); 
+                },10);
+            },
            begin: function(info){
+           
                 let that = this,temp=true;
                 let title=[],dataAvg=[],dataMax=[],dataNotCommit=[];
                 for(let i = 0;i<info.length;i++){
@@ -52,27 +70,25 @@
 
                 this.chartColumn.on("click",function(params){
                     that.isShow = false;
-                    that.$nextTick(function() {
+                    that.$nextTick(function() {    
                         store.get_scoreDetail({title:params.name}).then(r=>{
                          let opinion=[],opinionData=[];
-                        
+                         
                           for(var i=0;i<r.data.length-1;i++){
                             opinion.push(r.data[i].name);
                             opinionData.push(r.data[i]);
                           }
-                         
+                          that.titleC = r.data[r.data.length-1];
                           setTimeout(()=>{
                              that.drawPie('chartPie',r.data[r.data.length-1],opinion,opinionData);
+                              document.getElementById("chartPie").style.zIndex = "1";
                              that.charts.resize();  
+                             document.getElementById("chartPie").style.zIndex = "1"; 
                          },10);
                         })
                        
                      })
-                    // if(temp){
-                    //     that.$emit("workInfo",params.name,1);
-                    //     temp=false;
-                    // }
-                    // return ;
+              
                 })
                 this.chartColumn.setOption({
                         title: { text: '实验成绩分布', x: 'center' },
@@ -118,11 +134,18 @@
             
            } ,
             drawPie:function(id,rTitle,opinion,opinionData){
-               this.charts = echarts.init(document.getElementById(id))
+                let that =this;
+                let temp = true;
+               this.charts = echarts.init(document.getElementById(id));
+               this.charts.on("click",function(params){
+                
+                   that.$emit("workInfo",that.titleC,2,params.name);
+     
+               })
                this.charts.setOption({
                   title: {
                       text: rTitle,
-                      x: 'left',   
+                      x: 'center',   
                       textStyle : {
 
                           fontSize : 25,
@@ -133,8 +156,8 @@
                    formatter: '{a}<br/>{b}:{c} ({d}%)'
                  },
                  legend: {
-                     bottom: 10,
-                      left: 'center',
+                      orient: 'vertical',
+                      left: 'left',
                       data:opinion,
                      textStyle : {
             

@@ -13,11 +13,12 @@
               <span>{{scope.row.score == "-1" ?"暂未批改":scope.row.score}}</span>
             </template>
           </el-table-column>
-          <el-table-column label="作业" width="">
+          <el-table-column label="作业" width="300px">
             <template slot-scope="scope">
               <div v-if="scope.row.workpath =='' " class="error">学生还未上传作业</div>
               <div v-if="!(scope.row.workpath =='')"> 
-                <a type="text" :href="host.host+scope.row.workpath">查看作业</a></div>
+                <a type="text" :href="host.host+scope.row.workpath" target="_blank">
+                  {{scope.row.originalname}}</a></div>
             </template>
           </el-table-column>
           <el-table-column label="批改作业" width="">

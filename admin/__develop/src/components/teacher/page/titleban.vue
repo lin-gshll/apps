@@ -1,23 +1,75 @@
 <template>
-  <div class="title-ban">
-      <div class="flex-space l-h-60 bg-green text-center ft-30 ft-30-b">  
-        假装有个LOGO 
-      </div>
-  </div>
+    <div class="title-bar bg-grey ft-20">
+        <div class="l-h-60 title-con flex">
+            <div class="flex">
+                 <span class="title-icom">  
+                 
+                 </span> 
+                 <span style="margin-left:10px;">
+                        实验教务管理系统 &nbsp;&nbsp;&nbsp;&nbsp;  <span class="ft-24" style="color:#b2b267;">教师端 </span> 
+                 </span>
+            </div>
+            <div style="position:absolute;right:2%;" v-if="isLogin">
+              <el-button type="text" @click.stop="" >{{userName}}</el-button>
+                &nbsp;|
+              <el-button type="text" @click="goOut">退出</el-button>
+            </div>
+            <div style="position:absolute;right:2%;" v-if="!isLogin">
+              <el-button type="text"  @click="goLogin">登录</el-button>
+            </div>
+        </div>
+    </div>
 </template>
 <script>
-     export default {
-    name:"title-ban",
-    data() {
-      return {
-
+export default {
+  name: "titleBar",
+  data() {
+    return {
+      isLogin:false,
+      userName: JSON.parse(sessionStorage.getItem("tea_info")).username || "admin"
+    };
+  },
+  methods: {
+      goOut(){
+        this.$router.push({
+          path:"/"
+        })
+        sessionStorage.setItem("tea_info","");
+      },
+      goLogin(){
+         this.$router.push({
+          path:"/teacher"
+        })
       }
-    }
+  },
+  mounted: function() {
+      if(sessionStorage.getItem("tea_info")){
+        this.isLogin = true;
+      }
   }
+};
 </script>
 <style scoped>
-.title-ban
-{
-  width:100%;
+.flex {
+  display: flex;
+  align-items: center;
+}
+.title-bar {
+  width: 100%;
+  overflow: hidden;
+  margin-bottom: 20px !important;
+  border: 1px solid #ccc;
+}
+.title-icom {
+  display: inline-block;
+  height: 60px;
+  width: 100px;
+  
+  background: url("../../../assets/tea.png") no-repeat;
+    background-position: 50px 10px;
+  background-size:40px 40px; 
+}
+.login {
+  margin-right: 150px;
 }
 </style>
