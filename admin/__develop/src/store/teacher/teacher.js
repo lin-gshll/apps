@@ -49,8 +49,8 @@ let login = {
       return r;
     })
   },
-  get_score(){
-    return axios.post(this.apis.score).then((r) => {
+  get_score(info){
+    return axios.post(this.apis.score, qs.stringify(info)).then((r) => {
       return r;
     })
   },
