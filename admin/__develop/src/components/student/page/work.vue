@@ -18,8 +18,9 @@
         </el-table-column>
         <el-table-column label="作业">
           <template slot-scope="scope">
-            <div v-if="scope.row.workpath =='' ">您还未上传作业</div>
-            <div v-if="!(scope.row.workpath =='')">{{scope.row.workpath}}</div>
+            <div v-if="scope.row.workpath =='' " style="color:red;">您还未上传作业</div>
+            <div v-if="!(scope.row.workpath =='')">{{scope.row.originalname
+}}</div>
           </template>
         </el-table-column>
         <el-table-column label="操作">

@@ -60,7 +60,8 @@
             });
 
             var user = sessionStorage.setItem('stu_info',JSON.stringify({
-                  login_info:r.data
+                  login_info:r.data,
+                  username:r.data.recodeset.username
                 }));
             this.$router.push({
                 path:"student/index",

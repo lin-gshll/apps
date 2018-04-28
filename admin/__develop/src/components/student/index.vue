@@ -2,7 +2,7 @@
   <div class="index">
     <titleban></titleban>
     <el-tabs tab-position="left" style="min-height:600px;width:85%;margin:10px auto;" @tab-click="tabClick">
-      <div style="width:100%;margin:5px auto;">
+      <div style="width:100%;margin:5px auto;" v-show="isShow">
         <el-input :placeholder="placeholder" v-model="searchTxt" class="input-with-select">
           <el-button slot="append" icon="el-icon-search" @click="searchExp()"></el-button>
         </el-input>
@@ -34,6 +34,7 @@
     export default {
         data() {
             return {
+             isShow:true,
              stu_id:"",
              tableData:[],
              types:"",
@@ -45,6 +46,11 @@
 
         methods: {
           tabClick(e){
+            if(e.index == 3){
+              this.isShow = false;
+            }else{
+              this.isShow = true;
+            }
             this.searchTxt ="";
             this.types = e.index;
             if(e.index == 0 || e.index==1){
