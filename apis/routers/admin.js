@@ -3,6 +3,7 @@ let Admin = require("../models/admin.js");
 let Teacher = require("../models/teacher");
 let Student = require("../models/student");
 let Score = require("../models/score");
+let Info = require("../models/info");
 var multer = require('multer')
 var upload = multer({
     dest: 'upload_tmp/'
@@ -47,7 +48,8 @@ router.post("/login", function (req, res, next) {
                 message: "ok",
                 recodeset: {
                     username: r.name,
-                    status: r.status
+                    status: r.status,
+                    _id: r._id
                 }
             })
         } else {
@@ -115,7 +117,9 @@ router.post("/addteacher", function (req, res, next) {
 })
 //教师列表
 router.get("/teacherlist", function (req, res, next) {
-    Teacher.find().then((r) => {
+    Teacher.find().sort({
+        _id: -1
+    }).then((r) => {
         res.send(r);
     })
 })
@@ -216,7 +220,9 @@ router.post("/addstudent", function (req, res, next) {
 })
 //学生列表
 router.get("/studentlist", function (req, res, next) {
-    Student.find().then((r) => {
+    Student.find().sort({
+        _id: -1
+    }).then((r) => {
         res.send(r);
     })
 })
@@ -324,14 +330,15 @@ router.get("/explist", function (req, res, next) {
     if (req.query.teacher_name) {
         Exp.find({
             teaID: req.query.teacher_name
+        }).sort({
+            _id: -1
         }).then((r) => {
             res.send(r)
         })
     } else if (req.query.keys) {
         var reg = new RegExp(req.query.keys, 'ig');
         Exp.find({
-            $or: [
-                {
+            $or: [{
                     "title": {
                         $regex: reg
                     }
@@ -355,12 +362,15 @@ router.get("/explist", function (req, res, next) {
                 }
 
             ]
-        }, function (err, r) {
-            console.log(r);
+        }).sort({
+            _id: -1
+        }).then(function (r) {
             res.send(r);
         })
     } else {
-        Exp.find().then((r) => {
+        Exp.find().sort({
+            _id: -1
+        }).then((r) => {
             res.send(r);
         })
     }
@@ -435,6 +445,93 @@ router.post("/file", upload.single('file'), function (req, res, next) {
             message: "404.png"
         })
     }
+})
+//添加公告
+router.post("/addinfo", function (req, res, next) {
+    if (req.body.top) {
+        Info.findOneAndUpdate({
+            _id: req.body._id
+        }, {
+            created: Date.now()
+        }).then((r) => {
+            if (r) {
+                res.send({
+                    status:1,
+                    message:"置顶成功"
+                });
+            } else {
+                 res.send({
+                    status:-1,
+                    message:"置顶失败"
+                });
+            }
+        })
+    } else if (req.body._id) {
+        Info.findOneAndUpdate({
+            _id: req.body._id
+        }, {
+            admin: req.body.admin,
+            title:req.body.title,
+            desc:req.body.desc,
+            created:Date.now()
+        }).then((r) => {
+            if (r) {
+                res.send({
+                    status: 1,
+                    message: "修改成功"
+                });
+            } else {
+                res.send({
+                    status: -1,
+                    message: "修改失败"
+                });
+            }
+        })
+    } {
+        let item = new Info(req.body);
+        item.save().then((r) => {
+            if (r._id) {
+                res.send({
+                    status: 1,
+                    message: "ok"
+                })
+            } else {
+                res.send({
+                    status: -1,
+                    message: "error"
+                })
+            }
+        })
+    }
+
+})
+
+//添加公告
+router.post("/infolist", function (req, res, next) {
+    Info.find().sort({
+        created: -1
+    }).then((r) => {
+        res.send(r);
+    })
+
+})
+//添加公告
+router.post("/delinfo", function (req, res, next) {
+    Info.remove({
+        _id: req.body._id
+    }).then((r) => {
+        if (r.n > 0) {
+            res.send({
+                status: 1,
+                message: "删除成功"
+            })
+        } else {
+            res.send({
+                status: 1,
+                message: "删除失败"
+            })
+        }
+    })
 })
 
 

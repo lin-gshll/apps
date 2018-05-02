@@ -25,7 +25,10 @@ router.post("/login", function (req, res, next) {
                     username: r.name,
                     status: r.status,
                     _id: r._id,
-                    stuNo: r.no
+                    stuNo: r.no,
+                    class:r.class,
+                    college:r.college,
+                    email:r.email
                 }
             })
         } else {

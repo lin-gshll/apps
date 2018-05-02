@@ -14,7 +14,10 @@ router.post("/login", function (req, res, next) {
                 message: "ok",
                 recodeset: {
                     username: r.name,
-                    status: r.status
+                    status: r.status,
+                    _id:r._id.toString(),
+                    college:r.college,
+                    email:r.email
                 }
             })
         } else {
@@ -29,64 +32,74 @@ router.post("/login", function (req, res, next) {
 
 router.post("/work", function (req, res, next) {
     if (req.body.expID) {
-        Score.find(req.body, function (err, r) {
-            if (err) {
-                res.send([]);
-            } else {
-                res.send(r);
-            }
+        Score.find(req.body).sort({
+            "score": -1
+        }).then(function ( r) {
+            res.send(r);
         })
-    } else if (req.body.title) {
-        Score.find(req.body, function (err, r) {
-            if (err) {
-                res.send([]);
-            } else {
-                res.send(r);
+    } else if (req.body.lt) {
+        Score.find({
+            teaID: req.body.teaID,
+            title: req.body.title,
+            score: {
+                $gte: req.body.lt,
+                $lte: req.body.lg
             }
+        }).sort({
+            "score": -1
+        }).then(function ( r) {
+            res.send(r);
         })
+
+
     } else if (req.body.keys) {
         var reg = new RegExp(req.body.keys, 'ig'); //模糊查询参数  
         Score.find({
-                teaID: req.body.teaID,
-                $or: [{
-                        "title": {
-                            $regex: reg
-                        }
-                    },
-                    {
-                        "no": {
-                            $regex: reg
-                        }
-                    },
-                    {
-                        "stuName": {
-                            $regex: reg
-                        }
-                    },
-                    {
-                        "stuNo": {
-                            $regex: reg
-                        }
-                    },
-                    {
-                        "college": {
-                            $regex: reg
-                        }
+            teaID: req.body.teaID,
+            $or: [{
+                    "title": {
+                        $regex: reg
                     }
-                ]
-            },
-            function (err, r) {
-                res.send(r);
-            })
+                },
+                {
+                    "no": {
+                        $regex: reg
+                    }
+                },
+                {
+                    "stuName": {
+                        $regex: reg
+                    }
+                },
+                {
+                    "stuNo": {
+                        $regex: reg
+                    }
+                },
+                {
+                    "college": {
+                        $regex: reg
+                    }
+                }
+            ]
+        }).sort({
+            "score": -1
+        }).then(function (r) {
+            res.send(r);
+        })
+    } else if (req.body.title) {
+        Score.find(req.body).sort({
+            "score": -1
+        }).then(function (r) {
+            res.send(r);
+        })
     } else {
         Score.find({
             teaID: req.body.teaID
-        }, function (err, r) {
-            if (err) {
-                res.send([]);
-            } else {
-                res.send(r);
-            }
+        }).sort({
+            "score": -1
+        }).then(function (r) {
+            res.send(r);
         })
     }
 })
@@ -111,7 +124,9 @@ router.post("/correct", function (req, res, next) {
 })
 
 router.post("/score", function (req, res, next) {
+    let teaID = req.body.teaID;
     Score.aggregate().match({
+        teaID:teaID,
         score: {
             $gt: 0,
             $lte: 100
@@ -213,9 +228,9 @@ router.post("/scoredetail", function (req, res, next) {
                     },
                 }).exec(function (err, r3) {
                     let arr = [];
-                    
+
                     if (r.length > 0) {
-                    
+
                         arr.push({
                             value: r[0].count,
                             name: "0 ~ 59"
